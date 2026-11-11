@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "PageBot",
+    "version": "1.0.0",
+    "description": "Summarize webpages and ask questions about their content.",
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+    "action": {
+        "default_popup": "index.html"
+    }
+}

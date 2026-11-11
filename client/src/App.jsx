@@ -1,9 +1,28 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { extractCurrentPage } from "./services/pageExtractor";
 import "./App.css";
 
 function App() {
   const [question, setQuestion] = useState("");
+  const [page, setPage] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function loadPage() {
+      try {
+        setLoading(true);
+        const data = await extractCurrentPage();
+        setPage(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadPage();
+  }, []);
 
   return (
     <div className="pagebot">
@@ -27,8 +46,17 @@ function App() {
       {/* Current webpage */}
       <section className="page-info">
         <div className="section-label">CURRENT PAGE</div>
-        <h2>Waiting for webpage...</h2>
-        <p>Open a webpage to get started with PageBot.</p>
+
+        {loading ? (
+          <p>Reading webpage...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <>
+            <h2>{page.title}</h2>
+            <p>{page.url}</p>
+          </>
+        )}
       </section>
 
       {/* Summary */}
